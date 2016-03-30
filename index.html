@@ -19,6 +19,9 @@ q.request({}, 'get', 'test.php', success_callbk);
 q.request({}, 'post', 'test2.php', success_callbk);
 q.request({}, 'get', 'test2.php', success_callbk, error_callbk);
 q.process();
+q.request({}, 'post', 'test.php', success_callbk);
+q.request({}, 'get', 'test2.php', success_callbk, error_callbk);
+q.process();
 </script>
 </head>
 

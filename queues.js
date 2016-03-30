@@ -1,13 +1,14 @@
 //TODO implement data type customization
 //TODO implement remove functions
 function Message(token, data, method, url, onsuccess, onerror){
-    this.data      = data;
-    this.method    = method.toUpperCase();
-    this.url       = url;
-    this.dataType  = 'text';
-    this.onsuccess = onsuccess;
-    this.onerror   = onerror;
-    this.token     = token;
+    this.data       = data;
+    this.method     = method.toUpperCase();
+    this.url        = url;
+    this.dataType   = 'text';
+    this.onsuccess  = onsuccess;
+    this.onerror    = onerror;
+    this.oncomplete = null;
+    this.token      = token;
 }
 
 function MessageQueue(length){
@@ -85,5 +86,8 @@ MessageQueue.prototype.process = function(){
         this.data[i] = null;
         this.count = this.count - 1;
     }
+    
+    this.data = this.data.splice(0, this.data.length);
+    this.count = 0;
 }
 
