@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<script type="text/javascript" src="jquery-1.12.2.min.js"></script>
+<script type="text/javascript" src="queues.js"></script>
+<script type="text/javascript">
+function success_callbk(token, response, status){
+    alert(token + "Success!!!");
+}
+
+function error_callbk(token, response, status){
+    alert(token + "Error!!!");
+}
+
+var q = new MessageQueue(1);
+q.request({}, 'post', 'test.php', success_callbk, error_callbk);
+q.request({}, 'get', 'test.php', success_callbk);
+q.request({}, 'post', 'test2.php', success_callbk);
+q.request({}, 'get', 'test2.php', success_callbk, error_callbk);
+q.process();
+</script>
+</head>
+
+<body>
+
+</body>
+</html>
