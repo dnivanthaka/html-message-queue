@@ -11,21 +11,22 @@ function Message(token, data, method, url, onsuccess, onerror){
     this.token      = token;
 }
 
-function MessageQueue(length){
+function MessageQueue(){
     this.data = [];
     this.count = 0;
 }
 
 MessageQueue.prototype.size = function(){
-    return this.count;
+    return this.data.length;
 }
 //TODO implement oncomplete function
 MessageQueue.prototype.request = function(data, method, url, onsuccess, onerror = null, oncomplete = null){
-    var m = new Message(this.count, data, method, url, onsuccess, onerror);
-    this.data[this.count] = m;
-    this.count = this.count + 1;
+    var m = new Message(this.data.length, data, method, url, onsuccess, onerror);
+    //this.data[this.count] = m;
+    //this.count = this.count + 1;
+    this.data.push(m);
     
-    return this.count;
+    return this.data.length;
 }
 
 MessageQueue.prototype.sendRequest = function(message){
@@ -38,11 +39,13 @@ MessageQueue.prototype.sendRequest = function(message){
         data: message.data,
         success: function(response, status){
             console.log("Success " + message.token);
+	    //instance.data.shift();
+	    //instance.count--;
             instance.onsuccess(message, response, status);
             
         },
         error: function(response, status){
-            console.log("Error " + message.token);
+            console.log("Error " + message.token + response + status);
             instance.onerror(message, response, status);
         },
         complete: function(response, status){
@@ -55,6 +58,8 @@ MessageQueue.prototype.sendRequest = function(message){
 
 MessageQueue.prototype.onsuccess = function(message, response, status){
     //alert("MessageQueue.prototype.onsuccess" + response + status);
+    this.data.shift();
+    
     if(message.onsuccess !== null)    
         message.onsuccess(message.token, response, status);
 }
@@ -71,10 +76,11 @@ MessageQueue.prototype.oncomplete = function(message, response, status){
 }
 
 MessageQueue.prototype.process = function(){
-    var size = this.count;
+    //var size = this.count;
 
-    for(var i=0;i<size;i++){
+    for(var i=0;i<this.data.length;i++){
         var message = this.data[i];
+	//var message = this.shift();
         //message.onsuccess(i);
         //if(message.onerror !== null)
             //message.onerror(i);
@@ -82,12 +88,15 @@ MessageQueue.prototype.process = function(){
 
         
         this.sendRequest(message);
-        
-        this.data[i] = null;
+        //this.shift();
+        //this.data[i] = null;
         this.count = this.count - 1;
     }
     
-    this.data = this.data.splice(0, this.data.length);
-    this.count = 0;
+    alert(this.data.length);
+    //this.data = this.data.splice(0, this.data.length);
+    //this.count = 0;
+	
+    //this.forEach(this.sendRequest);
 }
 

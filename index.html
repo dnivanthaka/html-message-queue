@@ -13,7 +13,7 @@ function error_callbk(token, response, status){
     alert(token + "Error!!!");
 }
 
-var q = new MessageQueue(1);
+var q = new MessageQueue();
 q.request({}, 'post', 'test.php', success_callbk, error_callbk);
 q.request({}, 'get', 'test.php', success_callbk);
 q.request({}, 'post', 'test2.php', success_callbk);
